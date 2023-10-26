@@ -1,0 +1,31 @@
+name: Test Workflow
+
+on:
+  push:
+    branches:
+      - ass_b  # Adjust to your repository's default branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set Up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+
+      - name: Display Commit Hash
+        run: git rev-parse HEAD
+
+      - name: Build Project
+        run: mvn clean install -DskipTests -pl jest-common -am
+
+      - name: Run Specific Test
+        run: mvn -pl jest-common -Dtest=io.searchbox.indices.RolloverTest#testBasicUriGeneration
+
+      - name: Run NonDex Plugin
+        run: mvn -pl jest-common edu.illinois:nondex-maven-plugin:2.1.1:nondex -DnondexRuns=10 -Dtest=io.searchbox.indices.RolloverTest#testBasicUriGeneration
