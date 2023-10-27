@@ -26,9 +26,14 @@ jobs:
         overwrite-settings: true
         job-status: success
 
-    - name: Build and test
-      run: |
-        mvn clean install -DskipTests -pl jest-common -am
-        mvn -pl jest-common -Dtest=io.searchbox.indices.RolloverTest#testBasicUriGeneration
-        mvn -pl jest-common edu.illinois:nondex-maven-plugin:2.1.1:nondex -DnondexRuns=10 -Dtest=io.searchbox.indices.RolloverTest#testBasicUriGeneration
+     - name: Display Commit Hash
+       run: git rev-parse HEAD
 
+     - name: Build Project
+       run: mvn clean install -DskipTests -pl jest-common -am
+
+     - name: Run Specific Test
+       run: mvn -pl jest-common -Dtest=io.searchbox.indices.RolloverTest#testBasicUriGeneration
+
+     - name: Run NonDex Plugin
+       run: mvn -pl jest-common edu.illinois:nondex-maven-plugin:2.1.1:nondex -DnondexRuns=10 -Dtest=io.searchbox.indices.RolloverTest#testBasicUriGeneration
