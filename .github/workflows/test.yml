@@ -1,4 +1,4 @@
-name: Test Workflow
+name: Non-DEX Test Workflow
 
 on:
   push:
